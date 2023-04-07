@@ -16,14 +16,17 @@
 #
 default: &default
   adapter: postgresql
-  encoding: unicode
+  encoding: utf8
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV['DB_USERNAME'] || 'postgres' %>
+  password: "<%= ENV['DB_PASSWORD'] || 'postgres' %>"
+  host: <%= ENV['DB_HOST'] || '127.0.0.1' %>
 
 development:
   <<: *default
-  database: zukunft_back_development
+  database: zukunft_dev
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +60,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: zukunft_back_test
+  database: zukunft_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -81,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: zukunft_back_production
+  database: zukunft_prod
   username: zukunft_back
   password: <%= ENV["ZUKUNFT_BACK_DATABASE_PASSWORD"] %>
