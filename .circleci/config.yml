@@ -1,0 +1,53 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.0
+  node: circleci/node@5.0.3
+
+jobs:
+
+  rubocop:
+    docker:
+      - image: cimg/ruby:3.0.5-node
+        environment:
+          RAILS_ENV: test
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+
+      - image: cimg/postgres:9.6.22
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: finance_test
+          POSTGRES_PASSWORD: postgres
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: rubocop
+          command: bundle exec rubocop
+
+  rails_best_practices:
+    docker:
+      - image: cimg/ruby:3.0.5-node
+        environment:
+          RAILS_ENV: test
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+
+      - image: cimg/postgres:9.6.22
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: finance_test
+          POSTGRES_PASSWORD: postgres
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: rails_best_practices
+          command: bundle exec rails_best_practices
+
+workflows:
+  build_and_test:
+    jobs:
+      - rubocop
+      - rails_best_practices
