@@ -1,5 +1,6 @@
 module Account
   class AccountsController < ApplicationController
+    before_action :authenticate_user!
     before_action :set_account, only: %i[edit update destroy show]
 
     def index
@@ -30,6 +31,10 @@ module Account
 
     def cards
       @accounts = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
+    end
+
+    def brokers
+      @accounts = Account.where(user_id: current_user.id).broker_accounts.order(name: :asc)
     end
 
     def destroy
