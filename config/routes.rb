@@ -10,6 +10,7 @@ Rails.application.routes.draw do
                      }
 
   resources :categories, module: 'users', except: ['show']
+  resources :accounts, module: 'account'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
