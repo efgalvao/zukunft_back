@@ -5,14 +5,18 @@ module Account
 
     def index
       @accounts = Account.where(user_id: current_user.id).except_card_accounts.order(name: :asc)
+
+      render json: @accounts, status: :ok
     end
 
-    def show; end
+    def show
+      render json: @account, status: :ok
+    end
 
     def edit; end
 
     def create
-      @account = Account::CreateAccount.call(account_params)
+      @account = ::Account::CreateAccount.call(account_params)
 
       if @account.valid?
         render json: @account, status: :created
@@ -30,7 +34,8 @@ module Account
     end
 
     def cards
-      @accounts = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
+      @cards = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
+      render json: @cards, status: :ok
     end
 
     def brokers
@@ -49,7 +54,7 @@ module Account
     end
 
     def account_params
-      params.require(:account).permit(:name, :balance, :kind).merge(user_id: current_user.id)
+      params.require(:account).permit(:name, :balance_cents, :kind).merge(user_id: current_user.id)
     end
   end
 end

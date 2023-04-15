@@ -1,7 +1,7 @@
 module Users
   class CategoriesController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_category, only: %i[update destroy]
+    before_action :set_category, only: %i[update destroy show]
 
     def index
       @categories = Category.where(user_id: current_user.id)
@@ -26,6 +26,10 @@ module Users
     end
 
     def destroy
+      render json: @category, status: :ok
+    end
+
+    def show
       render json: @category, status: :ok
     end
 
