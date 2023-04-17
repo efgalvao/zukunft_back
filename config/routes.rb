@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
     scope module: 'account' do
       resources :accounts
+      resources :transactions, only: %i[index create update]
+
       get '/cards', to: 'accounts#cards'
       get '/brokers', to: 'accounts#brokers'
     end
