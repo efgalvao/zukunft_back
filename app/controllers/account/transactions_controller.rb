@@ -4,8 +4,8 @@ module Account
     before_action :set_transaction, only: %i[update]
 
     def index
-      account = Account.find_by(params[:account_id], user_id: current_user.id)
-      @transactions = Transaction.where(account_id: account.id).current_month.order(date: :desc)
+      account = Account.find_by(id: params[:account_id], user_id: current_user.id)
+      @transactions = Transaction.where(account_id: account.id).order(date: :desc)
       render json: @transactions, status: :ok
     end
 

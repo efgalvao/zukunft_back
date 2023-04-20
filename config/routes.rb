@@ -14,8 +14,9 @@ Rails.application.routes.draw do
     resources :categories, module: 'users'
 
     scope module: 'account' do
-      resources :accounts
-      resources :transactions, only: %i[index create update]
+      resources :accounts do
+        resources :transactions, only: %i[index create update]
+      end
 
       get '/cards', to: 'accounts#cards'
       get '/brokers', to: 'accounts#brokers'
