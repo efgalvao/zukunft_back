@@ -9,7 +9,6 @@ Rails.application.routes.draw do
                        registrations: 'users/registrations'
                      }
 
-
   scope 'api/v1' do
     resources :categories, module: 'users'
 
@@ -21,7 +20,6 @@ Rails.application.routes.draw do
       get '/cards', to: 'accounts#cards'
       get '/brokers', to: 'accounts#brokers'
     end
-
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
