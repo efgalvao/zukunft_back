@@ -26,7 +26,7 @@ module Transactions
       Account::Transaction.create!(
         account: account,
         category_id: category_id,
-        value: value,
+        value_cents: format_to_cents(value),
         kind: kind,
         date: date,
         title: title
@@ -37,6 +37,10 @@ module Transactions
       return Time.zone.today if params.fetch(:date) == ''
 
       params.fetch(:date)
+    end
+
+    def format_to_cents(value)
+      value.to_f * 100
     end
   end
 end

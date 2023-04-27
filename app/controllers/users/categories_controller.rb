@@ -26,6 +26,7 @@ module Users
     end
 
     def destroy
+      @category.destroy
       render json: @category, status: :ok
     end
 
