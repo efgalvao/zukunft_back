@@ -2,7 +2,7 @@ module Transactions
   class CreateTransaction < ApplicationService
     def initialize(params)
       @params = params
-      @account = Account::Account.find(params[:account_id])
+      @account_id = params.fetch(:account_id)
       @value = params.fetch(:value, 0)
       @kind = params.fetch(:kind, 'income')
       @date = set_date
@@ -20,7 +20,11 @@ module Transactions
 
     private
 
-    attr_reader :params, :account, :value, :kind, :date, :title, :category_id
+    attr_reader :params, :account_id, :value, :kind, :date, :title, :category_id
+
+    def account
+      @account ||= Account::Account.find(account_id)
+    end
 
     def create_transaction
       Account::Transaction.create!(

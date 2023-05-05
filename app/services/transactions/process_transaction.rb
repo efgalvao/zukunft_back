@@ -12,26 +12,20 @@ module Transactions
     end
 
     def call
-      case params.fetch(:kind)
-      when 'income'
-        Account::UpdateAccountBalance.call(account_id: account_id, amount: value.to_f)
-      when 'expense', 'investment'
-        Account::UpdateAccountBalance.call(account_id: account_id, amount: -value.to_f)
-      when 'transfer'
-        if params[:receiver]
-          Account::UpdateAccountBalance.call(account_id: account_id, amount: value.to_f)
-        else
-          Account::UpdateAccountBalance.call(account_id: account_id, amount: -value.to_f)
-        end
-      else
-        return 'Invalid kind'
-      end
-
+      Account::UpdateAccountBalance.call(account_id: account_id,
+                                         value: value_to_update_balance.to_f)
       Transactions::CreateTransaction.call(params)
     end
 
     private
 
     attr_reader :params, :account_id, :value, :date
+
+    def value_to_update_balance
+      return value if params.fetch(:kind) == 'income'
+      return -value.to_f if params.fetch(:kind) == 'expense'
+
+      params.fetch(:value_to_update_balance)
+    end
   end
 end

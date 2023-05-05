@@ -4,7 +4,7 @@ module Account
   class UpdateAccountBalance < ApplicationService
     def initialize(params)
       @account = Account.find(params[:account_id])
-      @amount = params.fetch(:amount, 0)
+      @value = params.fetch(:value, 0)
     end
 
     def self.call(params)
@@ -17,10 +17,10 @@ module Account
 
     private
 
-    attr_reader :account, :amount
+    attr_reader :account, :value
 
     def update_account_balance
-      account.balance_cents += amount.to_f * 100
+      account.balance_cents += value_cents.to_f * 100
       account.save
     end
   end

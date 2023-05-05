@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   scope 'api/v1' do
     resources :categories, module: 'users'
+    resources :transferences, module: 'users', only: %i[index create]
 
     scope module: 'account' do
       resources :accounts do
