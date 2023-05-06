@@ -1,5 +1,7 @@
 module Users
   class TransferencesController < ApplicationController
+    before_action :authenticate_user!
+
     def index
       @transferences = Transference::RetrieveTransference.call(current_user.id)
       render json: @transferences, status: :ok

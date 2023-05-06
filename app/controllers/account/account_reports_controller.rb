@@ -1,5 +1,7 @@
 module Account
   class AccountReportsController < ApplicationController
+    before_action :authenticate_user!
+
     def account_reports
       @account_reports = FetchAccountReports.account_reports(account_report_params)
       render json: @account_reports, status: :ok
