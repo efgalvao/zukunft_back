@@ -12,9 +12,13 @@ module Transactions
     end
 
     def call
-      Account::UpdateAccountBalance.call(account_id: account_id,
-                                         value: value_to_update_balance.to_f)
-      Transactions::CreateTransaction.call(params)
+      ActiveRecord::Base.transaction do
+        AccountReport::UpdateAccountReport.call(account_id: account_id,
+                                                params: update_report_params)
+        Account::UpdateAccountBalance.call(account_id: account_id,
+                                           value: value_to_update_balance.to_f)
+        Transactions::CreateTransaction.call(params)
+      end
     end
 
     private
@@ -26,6 +30,13 @@ module Transactions
       return -value.to_f if params.fetch(:kind) == 'expense'
 
       params.fetch(:value_to_update_balance)
+    end
+
+    def update_report_params
+      {
+        date: date,
+        "#{params.fetch(:kind)}_cents": value.to_f * 100
+      }
     end
   end
 end
