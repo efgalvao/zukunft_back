@@ -1,11 +1,11 @@
 module Transferences
   class ProcessTransference < ApplicationService
     def initialize(params)
-      @receiver_id = params.fetch('receiver_id')
-      @sender_id = params.fetch('sender_id')
-      @user_id = params.fetch('user_id')
-      @date = fetch_date(params.fetch('date'))
-      @value = params.fetch('value')
+      @receiver_id = params.fetch(:receiver_id)
+      @sender_id = params.fetch(:sender_id)
+      @user_id = params.fetch(:user_id)
+      @date = fetch_date(params.fetch(:date))
+      @value = params.fetch(:value)
     end
 
     def self.call(params)

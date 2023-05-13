@@ -1,10 +1,10 @@
-module Transference
+module Transferences
   class CreateTransference < ApplicationService
     def initialize(params)
-      @receiver_id = params.fetch('receiver_id')
-      @sender_id = params.fetch('sender_id')
+      @receiver_id = params.fetch('receiver')
+      @sender_id = params.fetch('sender')
       @user_id = params.fetch('user_id')
-      @date = set_date
+      @date = params.fetch('date')
       @value = params.fetch('value')
     end
 
@@ -23,16 +23,16 @@ module Transference
 
     attr_reader :receiver_id, :sender_id, :user_id, :date, :value
 
-    def set_date = params[:date].present? ? params[:date].to_date : Time.zone.today
+    def set_date = date.present? ? date.to_date : Time.zone.today
 
     def formated_value = value.to_f * 100
 
     def create_transference
-      Transference::Transference.create!(
+      Transference.create!(
         receiver_id: receiver_id,
         sender_id: sender_id,
         user_id: user_id,
-        date: date,
+        date: set_date,
         value_cents: formated_value
       )
     end
@@ -44,7 +44,7 @@ module Transference
         receiver_id: receiver_id,
         sender_id: sender_id,
         user_id: user_id,
-        date: date,
+        date: set_date,
         value: value
       }
     end
