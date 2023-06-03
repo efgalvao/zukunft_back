@@ -37,6 +37,7 @@ module AccountReport
     end
 
     def date
+      # refatorar
       @date ||= if params.fetch(:date).present?
                   Date.parse(params.fetch(:date)) if params.fetch(:date).instance_of?(String)
                 else
@@ -75,10 +76,5 @@ module AccountReport
     def final_balance_cents
       incomes - expenses - invested
     end
-
-    def total_balance
-      account.balance_cents
-    end
   end
 end
-
