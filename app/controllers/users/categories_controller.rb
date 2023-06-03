@@ -13,7 +13,8 @@ module Users
       if @category.save
         render json: @category, status: :created
       else
-        render json: { 'error': @category.errors.full_messages.to_sentence }, status: :unprocessable_entity
+        render json: { 'error': @category.errors.full_messages.to_sentence },
+               status: :unprocessable_entity
       end
     end
 
@@ -21,7 +22,8 @@ module Users
       if @category.update(category_params)
         render json: @category, status: :updated
       else
-        render json: { 'error': @category.errors.full_messages.to_sentence }, status: :unprocessable_entity
+        render json: { 'error': @category.errors.full_messages.to_sentence },
+               status: :unprocessable_entity
       end
     end
 
