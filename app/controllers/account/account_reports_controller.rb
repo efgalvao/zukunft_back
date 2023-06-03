@@ -8,7 +8,7 @@ module Account
     end
 
     def current_account_report
-      @account_report = FetchAccountReports.current_account_report(account_report_params[:account_id])
+      @account_report = FetchAccountReports.current_account_report(params[:account_id])
       render json: @account_report, status: :ok
     end
 
@@ -19,7 +19,7 @@ module Account
     private
 
     def account_report_params
-      params.require(:account_report).permit(:account_id, :start_date, :end_date)
+      params.permit(:account_id, :start_date, :end_date)
     end
   end
 end

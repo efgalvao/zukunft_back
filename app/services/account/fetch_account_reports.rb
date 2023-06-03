@@ -3,13 +3,19 @@ module Account
     def self.current_account_report(account_id)
       start_date = Time.zone.today.beginning_of_month
       end_date = Time.zone.today.end_of_month
-      AccountReport.find_by(account_id: account_id, date: start_date..end_date)
+      current_report = AccountReport.find_by(account_id: account_id, date: start_date..end_date)
+
+      return current_report unless current_report.nil?
+
+      AccountReport.create(account_id: account_id, date: Time.zone.now)
     end
 
     def self.account_reports(params)
-      start_date = params[:start_date].to_date.beginning_of_month
-      end_date = params[:end_date].to_date.end_of_month
-      AccountReport.where(account_id: params[:account_id], date: start_date..end_date)
+      start_date = params.fetch('start_date').to_date.beginning_of_month
+      end_date = params.fetch('end_date').to_date.end_of_month
+      reports = AccountReport.where(account_id: params[:account_id],
+                                    date: start_date..end_date).order(date: :asc)
+      format_report(reports)
     end
 
     def self.account_report(params)
@@ -18,11 +24,17 @@ module Account
       AccountReport.find_by(account_id: params[:account_id], date: start_date..end_date)
     end
 
-    def call
-      if @end_date.nil?
-        self.class.current_account_report(@account_id)
-      else
-        self.class.account_reports(@account_id, @start_date, @end_date)
+    def self.format_report(reports)
+      reports.map do |report|
+        {
+          Date: report.date,
+          Expenses: report.expenses_cents / 100.0,
+          Incomes: report.incomes_cents / 100.0,
+          Invested: report.invested_cents / 100.0,
+          FinalBalance: report.final_balance_cents / 100.0,
+          Dividends: report.dividends_cents / 100.0,
+          TotalBalance: report.total_balance_cents / 100.0
+        }
       end
     end
   end

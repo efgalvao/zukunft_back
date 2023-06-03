@@ -38,7 +38,7 @@ module AccountReport
 
     def date
       @date ||= if params.fetch(:date).present?
-                  Date.parse(params.fetch(:date))
+                  Date.parse(params.fetch(:date)) if params.fetch(:date).instance_of?(String)
                 else
                   Date.current
                 end
