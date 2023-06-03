@@ -25,6 +25,12 @@ Rails.application.routes.draw do
       get '/cards', to: 'accounts#cards'
       get '/brokers', to: 'accounts#brokers'
     end
+
+    scope module: 'investments', path: '/investments' do
+      get '/', to: 'investments#index', as: 'investments'
+
+      resources :stocks, controller: 'stock/stocks', except: %i[edit new]
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
