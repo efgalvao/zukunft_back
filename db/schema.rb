@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_03_011059) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_212725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,37 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_011059) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "dividends", force: :cascade do |t|
+    t.datetime "date"
+    t.integer "value_cents", default: 0, null: false
+    t.bigint "stock_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stock_id"], name: "index_dividends_on_stock_id"
+  end
+
+  create_table "negotiations", force: :cascade do |t|
+    t.string "kind"
+    t.date "date"
+    t.integer "invested_cents", default: 0
+    t.integer "shares", default: 0
+    t.string "negotiable_type"
+    t.bigint "negotiable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["negotiable_type", "negotiable_id"], name: "index_negotiations_on_negotiable"
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.date "date"
+    t.integer "value_cents", default: 0
+    t.string "priceable_type"
+    t.bigint "priceable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["priceable_type", "priceable_id"], name: "index_prices_on_priceable"
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -106,6 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_011059) do
   add_foreign_key "account_reports", "accounts"
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "dividends", "stocks"
   add_foreign_key "stocks", "accounts"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
