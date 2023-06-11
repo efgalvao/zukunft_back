@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
 
     post 'dividends', to: 'investments/stock/dividends#create'
+    post 'prices', to: 'investments/prices#create'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
