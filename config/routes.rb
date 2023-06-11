@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
       resources :stocks, controller: 'stock/stocks', except: %i[edit new]
     end
+
+    post 'dividends', to: 'investments/stock/dividends#create'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
