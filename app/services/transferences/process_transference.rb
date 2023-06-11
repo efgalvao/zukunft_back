@@ -33,15 +33,23 @@ module Transferences
 
     def receiver_params
       {
-        account_id: receiver.id, value: value, kind: 'transfer', receiver: true,
-        title: "Transference from #{sender.name}", date: date, value_to_update_balance: value
+        account_id: receiver.id,
+        value: value,
+        kind: 'transfer',
+        title: "Transference from #{sender.name}",
+        date: date,
+        value_to_update_balance: value
       }
     end
 
     def sender_params
       {
-        account_id: sender.id, value: value, kind: 'transfer', receiver: true,
-        title: "Transference to #{receiver.name}", date: date, value_to_update_balance: -value
+        account_id: sender.id,
+        value: value.to_f,
+        kind: 'transfer',
+        title: "Transference to #{receiver.name}",
+        date: date,
+        value_to_update_balance: -value.to_f
       }
     end
 

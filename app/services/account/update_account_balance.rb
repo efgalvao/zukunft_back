@@ -24,7 +24,7 @@ module Account
     end
 
     def update_account_balance
-      account.balance_cents += (value.to_f * 100).to_i
+      account.balance_cents += (value * 100).to_i
       account.save
     end
   end

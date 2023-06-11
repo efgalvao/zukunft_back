@@ -76,5 +76,12 @@ module AccountReport
     def final_balance_cents
       incomes - expenses - invested
     end
+
+    def total_balance
+      # TODO
+      # account.treasuries.where(released_at: nil).order(name: :asc).sum(&:current_value_cents) +
+      #   account.stocks.sum(&:current_total_value_cents) +
+      account.balance_cents
+    end
   end
 end

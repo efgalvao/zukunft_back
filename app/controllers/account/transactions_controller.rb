@@ -10,7 +10,7 @@ module Account
     end
 
     def create
-      @transaction = Transactions::ProcessTransaction.call(transactions_params)
+      @transaction = Transactions::RequestTransaction.call(transactions_params)
 
       if @transaction.valid?
         render json: @transaction, status: :created

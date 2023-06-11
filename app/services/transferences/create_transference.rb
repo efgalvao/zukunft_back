@@ -1,11 +1,11 @@
 module Transferences
   class CreateTransference < ApplicationService
     def initialize(params)
-      @receiver_id = params.fetch('receiver')
-      @sender_id = params.fetch('sender')
-      @user_id = params.fetch('user_id')
-      @date = params.fetch('date')
-      @value = params.fetch('value')
+      @receiver_id = params.fetch(:receiver)
+      @sender_id = params.fetch(:sender)
+      @user_id = params.fetch(:user_id)
+      @date = params.fetch(:date)
+      @value = params.fetch(:value)
     end
 
     def self.call(params)

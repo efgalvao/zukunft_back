@@ -13,10 +13,12 @@ module Transactions
 
     def call
       ActiveRecord::Base.transaction do
-        AccountReport::UpdateAccountReport.call(account_id: account_id,
-                                                params: update_report_params)
         Account::UpdateAccountBalance.call(account_id: account_id,
-                                           value: value_to_update_balance.to_f)
+                                           value: value_to_update_balance)
+        if params.fetch(:kind) != 'transfer'
+          AccountReport::UpdateAccountReport.call(account_id: account_id,
+                                                  params: update_report_params)
+        end
         Transactions::CreateTransaction.call(params)
       end
     end
@@ -26,17 +28,11 @@ module Transactions
     attr_reader :params, :account_id, :value, :date
 
     def value_to_update_balance
-      return value if params.fetch(:kind) == 'income'
-      return -value.to_f if params.fetch(:kind) == 'expense'
-
-      params.fetch(:value_to_update_balance)
+      params.fetch(:value_to_update_balance).to_f
     end
 
     def update_report_params
-      {
-        date: date,
-        "#{params.fetch(:kind)}_cents": value.to_f * 100
-      }
+      { date: date }.merge(params.fetch(:update_report_param))
     end
   end
 end
