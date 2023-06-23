@@ -17,20 +17,26 @@ module Investments
 
       def create
         stock = Investments::Stock::CreateStock.call(stock_params)
-        serialized_stock = Investments::Stock::StockSerializer.new(stock).serializable_hash[:data][:attributes]
+        serialized_stock = Investments::Stock::StockSerializer
+                           .new(stock)
+                           .serializable_hash[:data][:attributes]
 
         render json: serialized_stock, status: :created
       end
 
       def show
-        serialized_stock = Investments::Stock::StockSerializer.new(@stock).serializable_hash[:data][:attributes]
+        serialized_stock = Investments::Stock::StockSerializer
+                           .new(@stock)
+                           .serializable_hash[:data][:attributes]
 
         render json: serialized_stock, status: :ok
       end
 
       def update
         @stock.update(stock_params)
-        serialized_stock = Investments::Stock::StockSerializer.new(@stock).serializable_hash[:data][:attributes]
+        serialized_stock = Investments::Stock::StockSerializer
+                           .new(@stock)
+                           .serializable_hash[:data][:attributes]
 
         render json: serialized_stock, status: :ok
       end

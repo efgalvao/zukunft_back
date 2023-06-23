@@ -9,11 +9,11 @@ module Investments
     end
 
     def call
-      if params[:parent_kind] == 'stock'
-        price = stock.prices.new(price_params)
-      else
-        # TODO: Implement treasuries
-        # price = treasury.prices.new(price_params)
+      ApplicationRecord.transaction do
+        create_price
+
+        update_stock
+        update_account_balance
       end
 
       if price.save
@@ -34,6 +34,32 @@ module Investments
     # def treasury
     #   @treasury ||= Investments::Treasury::Treasury.find(params[:parent_id])
     # end
+
+    def create_price
+      if params[:parent_kind] == 'stock'
+        stock.prices.new(price_params)
+      else
+        []
+        # TODO: Implement treasuries
+        # price = treasury.prices.new(price_params)
+      end
+    end
+
+    def update_stock
+      # TODO
+      ActiveRecord::Base.transaction do
+        stock.shares_total += quantity.to_i
+        stock.invested_value_cents += invested
+        stock.current_value_cents = new_current_value_cents
+        stock.current_total_value_cents = new_current_total_value_cents
+
+        stock.save!
+      end
+    end
+
+    def update_account_balance
+      # TODO
+    end
 
     def price_params
       {

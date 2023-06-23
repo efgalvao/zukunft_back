@@ -49,4 +49,6 @@ module Transactions
   end
 end
 
-# { title: 'title', category_id: nil, value: '1.23', kind: 'income', account_id: 3, date: '2023-06-11', value_to_update_balance: '1.23', update_report_param: { income_cents: '1.23'.to_f * 100 }}
+# { title: 'title', category_id: nil, value: '1.23', kind: 'income', account_id: 3,
+# date: '2023-06-11', value_to_update_balance: '1.23',
+# update_report_param: { income_cents: '1.23'.to_f * 100 }}
