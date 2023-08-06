@@ -34,8 +34,8 @@ jobs:
       - run:
           name: Database setup
           command: |
-          bundle exec rails db:create --trace
-          bundle exec rails db:schema:load --trace
+            bundle exec rails db:create --trace
+            bundle exec rails db:schema:load --trace
       - run:
           name: Setup Code Climate test-reporter
           command: |
