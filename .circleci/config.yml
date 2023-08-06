@@ -33,7 +33,9 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
+          command: |
+          bundle exec rails db:create --trace
+          bundle exec rails db:schema:load --trace
       - run:
           name: Setup Code Climate test-reporter
           command: |
