@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Account::Account do
+RSpec.describe Account::Account, type: :model do
   subject { create(:account) }
 
   describe 'associations' do
