@@ -8,7 +8,7 @@ module Investments
 
       validates :ticker, presence: true
       validates :ticker,
-                uniqueness: { scope: :account_id, message: 'already exists for this account' }
+                uniqueness: { scope: :account_id }
 
       delegate :user, :name, to: :account, prefix: 'account'
       delegate :id, to: :'account.user', prefix: 'user'
