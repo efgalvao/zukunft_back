@@ -7,7 +7,7 @@ module Investments
       def index
         stocks = Investments::Stock::Stock
                  .joins(:account)
-                 .where(account: { user_id: current_user.id })
+                 .where(account: { user_id: current_user.id }, account_id: params[:account_id])
                  .order(ticker: :asc)
 
         serialized_stocks = Investments::Stock::StockSerializer.new(stocks).serializable_hash[:data]

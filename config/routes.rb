@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         resources :transactions, only: %i[index create update]
       end
 
-      get '/cards', to: 'accounts#cards'
+      resources :cards, only: %i[index create update destroy show]
       get '/brokers', to: 'accounts#brokers'
     end
 
@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
     post 'dividends', to: 'investments/stock/dividends#create'
     post 'prices', to: 'investments/prices#create'
+    post 'negotiations', to: 'investments/stock/negotiations#create'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -1,7 +1,7 @@
 module Account
   class AccountsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_account, only: %i[edit update destroy show]
+    before_action :set_account, only: %i[update destroy show]
 
     def index
       @accounts = Account.where(user_id: current_user.id).except_card_accounts.order(name: :asc)
@@ -12,8 +12,6 @@ module Account
     def show
       render json: @account, status: :ok
     end
-
-    def edit; end
 
     def create
       @account = ::Account::CreateAccount.call(account_params)
@@ -31,11 +29,6 @@ module Account
       else
         render json: @account.errors, status: :unprocessable_entity
       end
-    end
-
-    def cards
-      @cards = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
-      render json: @cards, status: :ok
     end
 
     def brokers
