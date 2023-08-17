@@ -4,13 +4,17 @@ module Account
     before_action :set_card, only: %i[update destroy show]
 
     def index
-      @cards = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
+      cards = Account.where(user_id: current_user.id).card_accounts.order(name: :asc)
 
-      render json: @cards, status: :ok
+      serialized_cards = AccountSerializer.new(cards).serializable_hash[:data]
+
+      render json: serialized_cards, status: :ok
     end
 
     def show
-      render json: @card, status: :ok
+      serialized_card = AccountSerializer.new(@card).serializable_hash[:data]
+
+      render json: serialized_card, status: :ok
     end
 
     def create
