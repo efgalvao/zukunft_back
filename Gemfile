@@ -44,6 +44,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
   gem 'factory_bot_rails', '~> 6.2.0'
+  gem 'faker'
   gem 'pry', '~> 0.13.1'
   gem 'pry-rails'
   gem 'rspec-rails', '6.0.3'
@@ -63,5 +64,4 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'faker'
 end
