@@ -21,15 +21,19 @@ module Account
       @card = ::Account::CreateAccount.call(card_params)
 
       if @card.valid?
-        render json: @card, status: :created
+        serialized_card = AccountSerializer.new(@card).serializable_hash[:data]
+
+        render json: serialized_card, status: :created
       else
         render json: @card.errors, status: :unprocessable_entity
       end
     end
 
     def update
-      if @card.update(name: params[:account][:name], kind: params[:account][:kind])
-        render json: @card, status: :ok
+      if @card.update(name: params[:card][:name])
+        serialized_card = AccountSerializer.new(@card).serializable_hash[:data]
+
+        render json: serialized_card, status: :ok
       else
         render json: @card.errors, status: :unprocessable_entity
       end
