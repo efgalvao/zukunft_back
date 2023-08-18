@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :account, class: Account::Account do
-    name { Faker::Movies::HitchhikersGuideToTheGalaxy.planet }
+    name { Faker::Company.name }
     user { create(:user) }
     balance_cents { 12_345 }
     kind { 'savings' }
