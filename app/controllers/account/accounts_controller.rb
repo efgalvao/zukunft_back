@@ -6,18 +6,21 @@ module Account
     def index
       @accounts = Account.where(user_id: current_user.id).except_card_accounts.order(name: :asc)
 
-      render json: @accounts, status: :ok
+      serialized_accounts = AccountSerializer.new(@accounts).serializable_hash[:data]
+      render json: serialized_accounts, status: :ok
     end
 
     def show
-      render json: @account, status: :ok
+      serialized_account = AccountSerializer.new(@account).serializable_hash[:data]
+      render json: serialized_account, status: :ok
     end
 
     def create
       @account = ::Account::CreateAccount.call(account_params)
 
       if @account.valid?
-        render json: @account, status: :created
+        serialized_account = AccountSerializer.new(@account).serializable_hash[:data]
+        render json: serialized_account, status: :created
       else
         render json: @account.errors, status: :unprocessable_entity
       end
@@ -25,7 +28,8 @@ module Account
 
     def update
       if @account.update(name: params[:account][:name], kind: params[:account][:kind])
-        render json: @account, status: :ok
+        serialized_account = AccountSerializer.new(@account).serializable_hash[:data]
+        render json: serialized_account, status: :ok
       else
         render json: @account.errors, status: :unprocessable_entity
       end
@@ -33,6 +37,9 @@ module Account
 
     def brokers
       @accounts = Account.where(user_id: current_user.id).broker_accounts.order(name: :asc)
+
+      serialized_accounts = AccountSerializer.new(@accounts).serializable_hash[:data]
+      render json: serialized_accounts, status: :ok
     end
 
     def destroy
