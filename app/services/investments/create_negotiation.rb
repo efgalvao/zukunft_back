@@ -1,7 +1,10 @@
 module Investments
   class CreateNegotiation < ApplicationService
     def initialize(params)
-      @params = params
+      @kind = params[:parent_kind]
+      @invested_cents = params[:value_cents].to_f * 100
+      @parent_id = params[:parent_id]
+      @date = params[:date]
     end
 
     def self.call(params)
@@ -32,7 +35,7 @@ module Investments
 
     private
 
-    attr_reader :params
+    attr_reader :kind, :invested_cents, :shares, :date
 
     def stock
       @stock ||= Investments::Stock::Stock.find(params[:parent_id])
@@ -44,10 +47,10 @@ module Investments
 
     def negotiation_params
       {
-        kind: params[:kind],
-        date: params[:date],
-        invested_cents: (params[:invested_cents].to_f * 100).to_i,
-        shares: params[:shares]
+        kind: kind,
+        date: date,
+        invested_cents: invested_cents,
+        shares: shares
       }
     end
   end
