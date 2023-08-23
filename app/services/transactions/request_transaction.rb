@@ -1,10 +1,10 @@
 module Transactions
   class RequestTransaction < ApplicationService
     def initialize(params)
-      @title = params.fetch(:title)
+      @title = params.fetch(:title, nil)
       @category_id = params.fetch(:category_id, nil)
       @value = params.fetch(:value, 0)
-      @kind = params.fetch(:kind)
+      @kind = params.fetch(:kind), nil
       @account_id = params.fetch(:account_id)
       @date = params.fetch(:date)
     end
