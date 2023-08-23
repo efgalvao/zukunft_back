@@ -27,7 +27,7 @@ module Users
       if @category.update(category_params)
         serialized_category = CategorySerializer.new(@category).serializable_hash[:data]
 
-        render json: serialized_category, status: :updated
+        render json: serialized_category, status: :ok
       else
         render json: { 'error': @category.errors.full_messages.to_sentence },
                status: :unprocessable_entity
