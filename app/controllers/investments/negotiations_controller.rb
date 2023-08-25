@@ -5,10 +5,15 @@ module Investments
     def create
       @negotiation = Investments::CreateNegotiation.call(negotiation_params)
 
-      if @negotiation.errors.any?
-        render json: { errors: @negotiation.errors }, status: :bad_request
+      if @negotiation.valid?
+        serialized_negotiation = Investments::NegotiationSerializer
+                                 .new(@negotiation)
+                                 .serializable_hash[:data]
+
+        render json: serialized_negotiation, status: :created
       else
-        render json: @negotiation, status: :created
+        render json: { errors: @negotiation.errors.full_messages.to_sentence },
+               status: :unprocessable_entity
       end
     end
 

@@ -1,6 +1,6 @@
 module Investments
   module Stock
-    class StockSerializer
+    class Investments::NegotiationSerializer
       include JSONAPI::Serializer
       attributes :kind, :date, :invested_cents, :shares, :negotiable_type, :negotiable_id
     end
