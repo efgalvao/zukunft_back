@@ -10,13 +10,7 @@ module Investments
       end
 
       def call
-        stock = Investments::Stock::Stock.new(@params)
-
-        if stock.save
-          stock
-        else
-          stock.errors
-        end
+        Investments::Stock::Stock.create(@params)
       end
     end
   end
