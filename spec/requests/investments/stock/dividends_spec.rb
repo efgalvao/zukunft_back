@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Users::CategoriesController', type: :request do
+RSpec.describe 'Investments::Stock::StocksController', type: :request do
   let(:user) { create(:user) }
   let(:account) { create(:account, user: user) }
   let(:stock) { create(:stock, account: account) }
@@ -9,7 +9,7 @@ RSpec.describe 'Users::CategoriesController', type: :request do
     context 'with valid attributes' do
       let(:dividend_attributes) { attributes_for(:dividend, stock: stock) }
 
-      it 'create category', :aggregate_failures do
+      it 'create dividend', :aggregate_failures do
         sign_in user
         post '/api/v1/dividends', params: { dividend: {
           date: dividend_attributes[:date],
@@ -29,7 +29,7 @@ RSpec.describe 'Users::CategoriesController', type: :request do
     context 'with invalid attributes' do
       let(:dividend_attributes) { attributes_for(:dividend, stock: stock) }
 
-      it 'create category', :aggregate_failures do
+      it 'does not reate dividend', :aggregate_failures do
         sign_in user
         post '/api/v1/dividends', params: { dividend: {
           date: dividend_attributes[:date],
@@ -41,7 +41,6 @@ RSpec.describe 'Users::CategoriesController', type: :request do
         expect(stock.reload.dividends.count).to eq(0)
 
         parsed_response = JSON.parse(response.body)
-        puts parsed_response
         expect(parsed_response['errors']).to eq('Stock must exist')
       end
     end
