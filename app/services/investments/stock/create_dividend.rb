@@ -3,6 +3,7 @@ module Investments
     class CreateDividend < ApplicationService
       def initialize(params)
         @params = params
+        @value_cents = params[:value].to_f
       end
 
       def self.call(params)
@@ -11,26 +12,22 @@ module Investments
 
       def call
         ApplicationRecord.transaction do
-          create_transaction
-          create_dividend
-        end
-        if dividend.valid?
+          dividend = create_dividend
+          create_transaction if dividend.valid?
           dividend
-        else
-          dividend.errors
         end
       end
 
       private
 
-      attr_reader :params
+      attr_reader :params, :value_cents
 
       def stock
-        @stock ||= Investments::Stock::Stock.find(params[:stock_id])
+        @stock ||= Investments::Stock::Stock.find_by(id: params[:stock_id])
       end
 
       def create_dividend
-        stock.dividends.create!(dividend_params)
+        Investments::Stock::Dividend.create(dividend_params)
       end
 
       def create_transaction
@@ -40,19 +37,20 @@ module Investments
       def dividend_params
         {
           date: params[:date],
-          value_cents: (params[:value_cents].to_f * 100).to_i
+          value_cents: (value_cents * 100).to_i,
+          stock_id: params[:stock_id]
         }
       end
 
       def transaction_params
         {
-          title: "Dividendos #{stock.name}",
-          value: params[:value_cents],
+          title: "Dividendos #{stock.ticker}",
+          value: value_cents,
           kind: 'income',
           account_id: stock.account_id,
           date: params[:date],
-          value_to_update_balance: params[:value_cents],
-          update_report_param: { income_cents: value.to_f * 100 }
+          value_to_update_balance: value_cents,
+          update_report_param: { income_cents: value_cents * 100 }
         }
       end
     end

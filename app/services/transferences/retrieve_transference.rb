@@ -9,23 +9,12 @@ module Transferences
     end
 
     def call
-      format_response(transferences)
+      transferences
     end
 
     private
 
     attr_reader :user_id
-
-    def format_response(transferences)
-      transferences.map do |transference|
-        {
-          sender: transference.sender.name,
-          receiver: transference.receiver.name,
-          value_cents: transference.value_cents,
-          date: transference.date
-        }
-      end
-    end
 
     def transferences
       date_range = Time.zone.today.beginning_of_month..Time.zone.today.end_of_month

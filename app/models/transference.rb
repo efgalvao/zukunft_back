@@ -10,6 +10,6 @@ class Transference < ApplicationRecord
   delegate :name, to: :receiver, prefix: 'receiver'
 
   def different_accounts
-    errors.add :base, 'Accounts must be different' if sender_id == receiver_id
+    errors.add(:base, 'Accounts must be different') if sender_id == receiver_id
   end
 end

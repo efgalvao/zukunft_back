@@ -5,13 +5,18 @@ module Users
 
     def index
       @categories = Category.where(user_id: current_user.id)
-      render json: @categories, status: :ok
+
+      serialized_categories = CategorySerializer.new(@categories).serializable_hash[:data]
+
+      render json: serialized_categories, status: :ok
     end
 
     def create
       @category = Category.new(category_params)
       if @category.save
-        render json: @category, status: :created
+        serialized_category = CategorySerializer.new(@category).serializable_hash[:data]
+
+        render json: serialized_category, status: :created
       else
         render json: { 'error': @category.errors.full_messages.to_sentence },
                status: :unprocessable_entity
@@ -20,7 +25,9 @@ module Users
 
     def update
       if @category.update(category_params)
-        render json: @category, status: :updated
+        serialized_category = CategorySerializer.new(@category).serializable_hash[:data]
+
+        render json: serialized_category, status: :ok
       else
         render json: { 'error': @category.errors.full_messages.to_sentence },
                status: :unprocessable_entity
@@ -29,11 +36,15 @@ module Users
 
     def destroy
       @category.destroy
-      render json: @category, status: :ok
+      serialized_category = CategorySerializer.new(@category).serializable_hash[:data]
+
+      render json: serialized_category, status: :ok
     end
 
     def show
-      render json: @category, status: :ok
+      serialized_category = CategorySerializer.new(@category).serializable_hash[:data]
+
+      render json: serialized_category, status: :ok
     end
 
     private

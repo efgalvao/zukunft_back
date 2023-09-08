@@ -27,7 +27,7 @@ module Transactions
     end
 
     def create_transaction
-      Account::Transaction.create!(
+      Account::Transaction.create(
         account: account,
         category_id: category_id,
         value_cents: format_to_cents(value),

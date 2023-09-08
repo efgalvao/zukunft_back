@@ -5,25 +5,29 @@ module Account
 
     def index
       account = Account.find_by(id: params[:account_id], user_id: current_user.id)
-      @transactions = Transaction.where(account_id: account.id).order(date: :desc)
-      render json: @transactions, status: :ok
+      transactions = Transaction.where(account_id: account.id).order(date: :desc)
+
+      serialized_transactions = TransactionSerializer.new(transactions).serializable_hash[:data]
+      render json: serialized_transactions, status: :ok
     end
 
     def create
       @transaction = Transactions::RequestTransaction.call(transactions_params)
 
       if @transaction.valid?
-        render json: @transaction, status: :created
+        serialized_transaction = TransactionSerializer.new(@transaction).serializable_hash[:data]
+        render json: serialized_transaction, status: :created
       else
-        render json: @transaction.errors, status: :unprocessable_entity
+        render json: { 'error': @transaction.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
     end
 
     def update
       if @transaction.update(update_params)
-        render json: @transaction, status: :ok
+        serialized_transaction = TransactionSerializer.new(@transaction).serializable_hash[:data]
+        render json: serialized_transaction, status: :ok
       else
-        render json: @transaction.errors, status: :unprocessable_entity
+        render json: { 'error': @transaction.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
     end
 

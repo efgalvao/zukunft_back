@@ -14,8 +14,9 @@ module Transferences
 
     def call
       ActiveRecord::Base.transaction do
-        create_transference
+        transference = create_transference
         process_transference
+        transference
       end
     end
 
@@ -28,7 +29,7 @@ module Transferences
     def formated_value = value.to_f * 100
 
     def create_transference
-      Transference.create!(
+      Transference.create(
         receiver_id: receiver_id,
         sender_id: sender_id,
         user_id: user_id,
