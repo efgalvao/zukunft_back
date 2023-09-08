@@ -27,10 +27,13 @@ module Transactions
     end
 
     def update_report_param
-      if kind == 'income'
+      case kind
+      when 'income'
         { income_cents: value.to_f * 100 }
-      elsif kind == 'expense'
+      when 'expense'
         { expense_cents: value.to_f * 100 }
+      when 'investment'
+        { invested_cents: value.to_f * 100 }
       end
     end
 
