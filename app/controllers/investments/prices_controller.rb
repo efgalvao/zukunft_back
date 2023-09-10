@@ -3,19 +3,17 @@ module Investments
     before_action :authenticate_user!
 
     def create
-      @price = Investments::CreatePrice.call(prices_params)
+      Investments::CreatePrice.call(prices_params)
 
-      if @price.errors.any?
-        render json: { errors: @price.errors }, status: :bad_request
-      else
-        render json: @price, status: :created
-      end
+      render json: { status: 'created' }, status: :created
+    rescue StandardError
+      render json: { status: 'error' }, status: :unprocessable_entity
     end
 
     private
 
     def prices_params
-      params.require(:prices).permit(:parent_kind, :parent_id, :date, :value_cents)
+      params.require(:price).permit(:parent_kind, :parent_id, :date, :value)
     end
   end
 end

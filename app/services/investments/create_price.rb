@@ -1,7 +1,10 @@
 module Investments
   class CreatePrice < ApplicationService
     def initialize(params)
-      @params = params
+      @date = params[:date]
+      @value = params[:value_cents].to_f
+      @parent_kind = params[:parent_kind]
+      @parent_id = params[:parent_id]
     end
 
     def self.call(params)
@@ -12,60 +15,48 @@ module Investments
       ApplicationRecord.transaction do
         create_price
 
-        update_stock
-        update_account_balance
-      end
-
-      if price.save
-        price
-      else
-        price.errors
+        consolidate_stock
+        consolidate_account_report
       end
     end
 
     private
 
-    attr_reader :params
-
-    def stock
-      @stock ||= Investments::Stock::Stock.find(params[:parent_id])
-    end
-
-    # def treasury
-    #   @treasury ||= Investments::Treasury::Treasury.find(params[:parent_id])
-    # end
+    attr_reader :date, :value, :parent_kind, :parent_id
 
     def create_price
-      if params[:parent_kind] == 'stock'
-        stock.prices.new(price_params)
+      if parent_kind == 'stock'
+        stock.prices.create(price_params)
       else
         []
-        # TODO: Implement treasuries
-        # price = treasury.prices.new(price_params)
       end
     end
 
-    def update_stock
-      # TODO
-      ActiveRecord::Base.transaction do
-        stock.shares_total += quantity.to_i
-        stock.invested_value_cents += invested
-        stock.current_value_cents = new_current_value_cents
-        stock.current_total_value_cents = new_current_total_value_cents
-
-        stock.save!
-      end
+    def stock
+      @stock ||= Investments::Stock::Stock.find(parent_id)
     end
 
-    def update_account_balance
-      # TODO
+    def consolidate_account_report
+      AccountReport::UpdateAccountReport.call(account_id: stock.account_id)
+    end
+
+    def consolidate_stock
+      Investments::Stock::ConsolidateStock.call(stock_id: stock.id)
     end
 
     def price_params
       {
-        date: params[:date],
-        value_cents: (params[:value_cents].to_f * 100).to_i
+        date: date,
+        value_cents: value_in_cents
       }
+    end
+
+    def value_in_cents
+      value * 100
+    end
+
+    def value_to_update_balance
+      value_in_cents * stock.shares_total
     end
   end
 end

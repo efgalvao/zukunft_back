@@ -14,5 +14,9 @@ module Account
 
     validates :name, presence: true, uniqueness: true
     validates :kind, presence: true
+
+    def current_report
+      reports.find_by(date: Date.current.beginning_of_month..Date.current.end_of_month)
+    end
   end
 end

@@ -10,7 +10,9 @@ module Investments
                   .where(account: { user_id: current_user.id }, account_id: params[:stock][:account_id])
                   .order(ticker: :asc)
 
-        serialized_stocks = Investments::Stock::StockSerializer.new(@stocks).serializable_hash[:data]
+        serialized_stocks = Investments::Stock::StockSerializer
+                            .new(@stocks, { include: %i[negotiations prices dividends] })
+                            .serializable_hash
 
         render json: serialized_stocks, status: :ok
       end
@@ -19,8 +21,8 @@ module Investments
         stock = Investments::Stock::CreateStock.call(stock_params)
         if stock.valid?
           serialized_stock = Investments::Stock::StockSerializer
-                             .new(stock)
-                             .serializable_hash[:data]
+                             .new(stock, { include: %i[negotiations prices dividends] })
+                             .serializable_hash
 
           render json: serialized_stock, status: :created
         else
@@ -31,8 +33,8 @@ module Investments
 
       def show
         serialized_stock = Investments::Stock::StockSerializer
-                           .new(@stock)
-                           .serializable_hash[:data]
+                           .new(@stock, { include: %i[negotiations prices dividends] })
+                           .serializable_hash
 
         render json: serialized_stock, status: :ok
       end
@@ -42,8 +44,8 @@ module Investments
 
         if @stock.valid?
           serialized_stock = Investments::Stock::StockSerializer
-                             .new(@stock)
-                             .serializable_hash[:data]
+                             .new(@stock, { include: %i[negotiations prices dividends] })
+                             .serializable_hash
 
           render json: serialized_stock, status: :ok
         else
