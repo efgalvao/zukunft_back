@@ -30,12 +30,12 @@ RSpec.describe Investments::CreatePrice, type: :service do
       expect(stock.current_total_value_cents).to eq((value_cents.to_f * 100).to_i * stock.shares_total)
     end
 
-    it 'consolidate account' do
-      expect(stock.account.balance_cents).to eq(100)
+    it 'consolidate account report' do
+      expect(stock.account.current_report).to eq(nil)
 
       service
-
-      expect(stock.reload.account.balance_cents).to eq(stock.current_total_value_cents)
+      expect(stock.reload.account.current_report.total_balance_cents)
+        .to eq(stock.current_total_value_cents + stock.account.balance_cents)
     end
   end
 end

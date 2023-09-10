@@ -7,7 +7,7 @@ module AccountReport
       @params = params
     end
 
-    def self.call(account_id:, params:)
+    def self.call(account_id:, params: {})
       new(account_id: account_id, params: params).call
     end
 
@@ -37,12 +37,7 @@ module AccountReport
     end
 
     def date
-      # refatorar
-      @date ||= if params.fetch(:date).present?
-                  Date.parse(params.fetch(:date)) if params.fetch(:date).instance_of?(String)
-                else
-                  Date.current
-                end
+      @date ||= params[:date].presence&.to_date || Date.current
     end
 
     def new_attributes
@@ -80,8 +75,8 @@ module AccountReport
     def total_balance
       # TODO
       # account.treasuries.where(released_at: nil).order(name: :asc).sum(&:current_value_cents) +
-      #   account.stocks.sum(&:current_total_value_cents) +
-      account.balance_cents
+      account.stocks.sum(&:current_total_value_cents) +
+        account.balance_cents
     end
   end
 end

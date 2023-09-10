@@ -16,7 +16,7 @@ module Investments
         create_price
 
         consolidate_stock
-        consolidate_broker_account
+        consolidate_account_report
       end
     end
 
@@ -36,8 +36,8 @@ module Investments
       @stock ||= Investments::Stock::Stock.find(parent_id)
     end
 
-    def consolidate_broker_account
-      Account::ConsolidateBrokerAccount.call(account_id: stock.account_id)
+    def consolidate_account_report
+      AccountReport::UpdateAccountReport.call(account_id: stock.account_id)
     end
 
     def consolidate_stock
