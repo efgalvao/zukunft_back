@@ -3,7 +3,7 @@ module Transactions
     def initialize(params)
       @title = params.fetch(:title, nil)
       @category_id = params.fetch(:category_id, nil)
-      @value = params.fetch(:value, 0)
+      @value = params.fetch(:value, 0).to_f
       @kind = params.fetch(:kind, nil)
       @account_id = params.fetch(:account_id)
       @date = params.fetch(:date)
@@ -23,17 +23,17 @@ module Transactions
 
     def value_to_update_balance
       return value if kind == 'income'
-      return -value.to_f if kind == 'expense'
+      return -value if kind == 'expense'
     end
 
     def update_report_param
       case kind
       when 'income'
-        { income_cents: value.to_f * 100 }
+        { income_cents: value_in_cents }
       when 'expense'
-        { expense_cents: value.to_f * 100 }
+        { expense_cents: value_in_cents }
       when 'investment'
-        { invested_cents: value.to_f * 100 }
+        { invested_cents: value_in_cents }
       end
     end
 
@@ -48,6 +48,10 @@ module Transactions
         value_to_update_balance: value_to_update_balance,
         update_report_param: update_report_param
       }
+    end
+
+    def value_in_cents
+      (value * 100).to_i
     end
   end
 end
