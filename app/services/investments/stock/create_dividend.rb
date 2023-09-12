@@ -32,7 +32,7 @@ module Investments
       end
 
       def create_transaction
-        Transactions::ProcessTransaction.call(transaction_params)
+        Transactions::RequestTransaction.call(transaction_params)
       end
 
       def dividend_params

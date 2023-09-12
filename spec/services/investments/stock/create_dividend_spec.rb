@@ -4,7 +4,6 @@ RSpec.describe Investments::Stock::CreateDividend, type: :service do
   context 'with valid attributes' do
     subject(:service) { described_class.call(params) }
 
-    # Parei aqui
     before { create(:negotiation, negotiable: stock, shares: 10) }
 
     let(:value) { '1.23' }
@@ -17,25 +16,18 @@ RSpec.describe Investments::Stock::CreateDividend, type: :service do
       }
     end
 
-    it 'create price', :aggregate_failures do
-      expect { service }.to change(Investments::Price, :count).by(1)
-      expect(stock.reload.prices.count).to eq(1)
-      expect(stock.prices.last.value_cents).to eq((value_cents.to_f * 100).to_i)
+    it 'create dividend', :aggregate_failures do
+      expect { service }.to change(Investments::Stock::Dividend, :count).by(1)
+      expect(stock.reload.dividends.count).to eq(1)
+      expect(stock.dividends.last.value_cents).to eq((value.to_f * 100).to_i)
     end
 
-    it 'consolidate stock' do
-      service
-
-      expect(stock.reload.current_value_cents).to eq((value_cents.to_f * 100).to_i)
-      expect(stock.current_total_value_cents).to eq((value_cents.to_f * 100).to_i * stock.shares_total)
-    end
-
-    it 'consolidate account report' do
-      expect(stock.account.current_report).to eq(nil)
+    it 'create transaction' do
+      expect(stock.account.transactions.first).to eq(nil)
 
       service
-      expect(stock.reload.account.current_report.total_balance_cents)
-        .to eq(stock.current_total_value_cents + stock.account.balance_cents)
+      expect(stock.reload.account.transactions.first.value_cents)
+        .to eq((value.to_f * 100).to_i)
     end
   end
 end
