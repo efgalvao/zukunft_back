@@ -3,7 +3,7 @@ module Transactions
     def initialize(params)
       @title = params.fetch(:title, nil)
       @category_id = params.fetch(:category_id, nil)
-      @value = params.fetch(:value, 0).to_f
+      @value = params.fetch(:value, 0)
       @kind = params.fetch(:kind, nil)
       @account_id = params.fetch(:account_id)
       @date = params.fetch(:date)
@@ -51,7 +51,7 @@ module Transactions
     end
 
     def value_in_cents
-      (value * 100).to_i
+      (value.to_f * 100).to_i
     end
   end
 end
