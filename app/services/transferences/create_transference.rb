@@ -24,8 +24,6 @@ module Transferences
 
     attr_reader :receiver_id, :sender_id, :user_id, :date, :value
 
-    def set_date = date.present? ? date.to_date : Time.zone.today
-
     def formated_value = value.to_f * 100
 
     def create_transference
@@ -33,7 +31,7 @@ module Transferences
         receiver_id: receiver_id,
         sender_id: sender_id,
         user_id: user_id,
-        date: set_date,
+        date: date,
         value_cents: formated_value
       )
     end
@@ -45,7 +43,7 @@ module Transferences
         receiver_id: receiver_id,
         sender_id: sender_id,
         user_id: user_id,
-        date: set_date,
+        date: date,
         value: value
       }
     end

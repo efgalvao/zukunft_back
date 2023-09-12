@@ -2,8 +2,9 @@ module Investments
   module Stock
     class CreateDividend < ApplicationService
       def initialize(params)
-        @params = params
-        @value_cents = params[:value].to_f
+        @value = params[:value]
+        @stock_id = params[:stock_id]
+        @date = params[:date]
       end
 
       def self.call(params)
@@ -20,10 +21,10 @@ module Investments
 
       private
 
-      attr_reader :params, :value_cents
+      attr_reader :value, :stock_id, :date
 
       def stock
-        @stock ||= Investments::Stock::Stock.find_by(id: params[:stock_id])
+        @stock ||= Investments::Stock::Stock.find_by(id: stock_id)
       end
 
       def create_dividend
@@ -31,26 +32,24 @@ module Investments
       end
 
       def create_transaction
-        Transactions::ProcessTransaction.call(transaction_params)
+        Transactions::RequestTransaction.call(transaction_params)
       end
 
       def dividend_params
         {
-          date: params[:date],
-          value_cents: (value_cents * 100).to_i,
-          stock_id: params[:stock_id]
+          date: date,
+          value_cents: (value.to_f * 100).to_i,
+          stock_id: stock_id
         }
       end
 
       def transaction_params
         {
           title: "Dividendos #{stock.ticker}",
-          value: value_cents,
+          value: value,
           kind: 'income',
           account_id: stock.account_id,
-          date: params[:date],
-          value_to_update_balance: value_cents,
-          update_report_param: { income_cents: value_cents * 100 }
+          date: date
         }
       end
     end

@@ -4,7 +4,7 @@ module Transferences
       @receiver_id = params.fetch(:receiver_id)
       @sender_id = params.fetch(:sender_id)
       @user_id = params.fetch(:user_id)
-      @date = fetch_date(params.fetch(:date))
+      @date = params.fetch(:date)
       @value = params.fetch(:value)
     end
 
@@ -13,20 +13,20 @@ module Transferences
     end
 
     def call
-      process_receiver_transaction
-      process_sender_transaction
+      request_receiver_transaction
+      request_sender_transaction
     end
 
     private
 
     attr_reader :receiver_id, :sender_id, :user_id, :date, :value
 
-    def process_receiver_transaction
-      Transactions::ProcessTransaction.call(receiver_params)
+    def request_receiver_transaction
+      Transactions::RequestTransaction.call(receiver_params)
     end
 
-    def process_sender_transaction
-      Transactions::ProcessTransaction.call(sender_params)
+    def request_sender_transaction
+      Transactions::RequestTransaction.call(sender_params)
     end
 
     def fetch_date(date) = date.present? ? date.to_date : Time.zone.today
@@ -37,8 +37,7 @@ module Transferences
         value: value,
         kind: 'transfer',
         title: "Transference from #{sender.name}",
-        date: date,
-        value_to_update_balance: value
+        date: date
       }
     end
 
@@ -48,8 +47,7 @@ module Transferences
         value: value.to_f,
         kind: 'transfer',
         title: "Transference to #{receiver.name}",
-        date: date,
-        value_to_update_balance: -value.to_f
+        date: date
       }
     end
 
