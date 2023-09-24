@@ -3,7 +3,7 @@
 module Account
   class CreateAccount < ApplicationService
     def initialize(params)
-      @balance_cents = params.fetch(:balance_cents, 0)
+      @balance = params.fetch(:balance, 0)
       @name = params.fetch(:name, nil)
       @kind = params.fetch(:kind, 0)
       @user_id = params.fetch(:user_id, nil)
@@ -19,12 +19,16 @@ module Account
 
     private
 
-    attr_reader :balance_cents, :name, :kind, :user_id
+    attr_reader :balance, :name, :kind, :user_id
 
     def create_account
       ActiveRecord::Base.transaction do
         Account.create(name: name, balance_cents: balance_cents, kind: kind, user_id: user_id)
       end
+    end
+
+    def balance_cents
+      balance.to_f * 100
     end
   end
 end

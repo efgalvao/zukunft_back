@@ -54,27 +54,29 @@ RSpec.describe 'Account::AccountsController', type: :request do
   describe 'create account' do
     context 'with valid attributes' do
       let(:account_attributes) { attributes_for(:account, user: user) }
+      let(:balance) { '1000.01' }
 
       it 'create card', :aggregate_failures do
         sign_in user
         post '/api/v1/accounts', params: { account: { name: account_attributes[:name],
-                                                      balance_cents: account_attributes[:balance_cents] } }
+                                                      balance: balance } }
 
         expect(response).to be_successful
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response['attributes']['name']).to eq(account_attributes[:name])
-        expect(parsed_response['attributes']['balance_cents']).to eq(account_attributes[:balance_cents])
+        expect(parsed_response['attributes']['balance_cents']).to eq(balance.to_f * 100)
       end
     end
 
     context 'with invalid attributes' do
       let(:account_attributes) { attributes_for(:account, user: user, name: '') }
+      let(:balance) { '1000.01' }
 
       it 'create card', :aggregate_failures do
         sign_in user
         post '/api/v1/accounts', params: { account: { name: account_attributes[:name],
-                                                      balance_cents: account_attributes[:balance_cents] } }
+                                                      balance: balance } }
 
         expect(response).to be_unprocessable
 

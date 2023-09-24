@@ -41,16 +41,17 @@ RSpec.describe 'Card Accounts', type: :request do
 
     context 'with valid attributes' do
       let(:card_account) { attributes_for(:account, :card, user: user) }
+      let(:balance) { '1000.01' }
 
       it 'create card', :aggregate_failures do
         sign_in user
-        post '/api/v1/cards', params: { card: { name: card_account[:name], balance_cents: card_account[:balance_cents] } }
+        post '/api/v1/cards', params: { card: { name: card_account[:name], balance: balance } }
 
         expect(response).to be_successful
 
         parsed_response = JSON.parse(response.body)
         expect(parsed_response['attributes']['name']).to eq(card_account[:name])
-        expect(parsed_response['attributes']['balance_cents']).to eq(card_account[:balance_cents])
+        expect(parsed_response['attributes']['balance_cents']).to eq(balance.to_f * 100)
       end
     end
 

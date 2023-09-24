@@ -51,7 +51,7 @@ module Account
     end
 
     def card_params
-      params.require(:card).permit(:name, :balance_cents, :kind).merge(user_id: current_user.id)
+      params.require(:card).permit(:name, :balance, :kind).merge(user_id: current_user.id)
     end
   end
 end
