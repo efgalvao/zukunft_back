@@ -34,7 +34,7 @@ module Investments
       def show
         serialized_stock = Investments::Stock::StockSerializer
                            .new(@stock, { include: %i[negotiations prices dividends] })
-                           .serializable_hash
+                           .serializable_hash[:data]
 
         render json: serialized_stock, status: :ok
       end
@@ -68,6 +68,8 @@ module Investments
                  .order('negotiations.date ASC')
                  .order('prices.date ASC')
                  .find(params[:id])
+                 .tap { |stock| stock.negotiations = stock.negotiations.last(6) }
+                 .tap { |stock| stock.dividends = stock.dividends.last(6) }
       end
 
       def stock_params

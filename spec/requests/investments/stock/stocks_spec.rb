@@ -79,13 +79,13 @@ RSpec.describe 'Investments::Stock::StocksController', type: :request do
       expect(response).to be_successful
 
       parsed_response = JSON.parse(response.body)
-      expect(parsed_response['data']['id']).to eq(stock.id.to_s)
-      expect(parsed_response['data']['attributes']['ticker']).to eq(stock.ticker)
-      expect(parsed_response['data']['attributes']['account_id']).to eq(stock.account_id)
-      expect(parsed_response['data']['attributes']['invested_value_cents']).to eq(stock.invested_value_cents)
-      expect(parsed_response['data']['attributes']['current_value_cents']).to eq(stock.current_value_cents)
-      expect(parsed_response['data']['attributes']['current_total_value_cents']).to eq(stock.current_total_value_cents)
-      expect(parsed_response['data']['attributes']['shares_total']).to eq(stock.shares_total)
+      expect(parsed_response['id']).to eq(stock.id.to_s)
+      expect(parsed_response['attributes']['ticker']).to eq(stock.ticker)
+      expect(parsed_response['attributes']['account_id']).to eq(stock.account_id)
+      expect(parsed_response['attributes']['invested_value_cents']).to eq(stock.invested_value_cents)
+      expect(parsed_response['attributes']['current_value_cents']).to eq(stock.current_value_cents)
+      expect(parsed_response['attributes']['current_total_value_cents']).to eq(stock.current_total_value_cents)
+      expect(parsed_response['attributes']['shares_total']).to eq(stock.shares_total)
     end
   end
 
