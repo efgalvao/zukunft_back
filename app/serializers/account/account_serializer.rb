@@ -1,6 +1,6 @@
 module Account
   class AccountSerializer
     include JSONAPI::Serializer
-    attributes :name, :balance_cents, :kind, :updated_at
+    attributes :id, :name, :balance_cents, :kind, :updated_at
   end
 end
