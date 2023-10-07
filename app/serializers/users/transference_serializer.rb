@@ -1,6 +1,14 @@
 module Users
   class TransferenceSerializer
     include JSONAPI::Serializer
-    attributes :sender_id, :receiver_id, :value_cents, :date
+    attributes :value_cents, :date, :sender, :receiver
+
+    def sender
+      object.sender.name
+    end
+
+    def receiver
+      object.receiver.name
+    end
   end
 end
