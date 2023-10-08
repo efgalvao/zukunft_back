@@ -21,9 +21,10 @@ RSpec.describe 'Users::TransferencesController', type: :request do
 
       parsed_response = JSON.parse(response.body)
       expect(parsed_response).not_to eq('[]')
-      expect(parsed_response[0]['id']).to eq(transference.id.to_s)
-      expect(parsed_response[0]['attributes']['sender_id']).to eq(sender_account.id)
-      expect(parsed_response[0]['attributes']['receiver_id']).to eq(receiver_account.id)
+
+      expect(parsed_response['past_transferences'][0]['value_cents']).to eq(transference.value_cents)
+      expect(parsed_response['past_transferences'][0]['sender_name']).to eq(sender_account.name)
+      expect(parsed_response['past_transferences'][0]['receiver_name']).to eq(receiver_account.name)
     end
   end
 
@@ -48,8 +49,9 @@ RSpec.describe 'Users::TransferencesController', type: :request do
         expect(Transference.count).to eq(1)
 
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response['attributes']['sender_id']).to eq(sender_account.id)
-        expect(parsed_response['attributes']['receiver_id']).to eq(receiver_account.id)
+
+        expect(parsed_response['sender_name']).to eq(sender_account.name)
+        expect(parsed_response['receiver_name']).to eq(receiver_account.name)
       end
     end
 

@@ -15,9 +15,9 @@ RSpec.describe 'Users::TransactionsController', type: :request do
 
       parsed_response = JSON.parse(response.body)
       expect(parsed_response).not_to eq('[]')
-      expect(parsed_response[0]['id']).to eq(transaction.id.to_s)
-      expect(parsed_response[0]['attributes']['title']).to eq(transaction.title)
-      expect(parsed_response[0]['attributes']['value_cents']).to eq(transaction.value_cents)
+      expect(parsed_response['past_transactions'][0]['id']).to eq(transaction.id)
+      expect(parsed_response['past_transactions'][0]['title']).to eq(transaction.title)
+      expect(parsed_response['past_transactions'][0]['value_cents']).to eq(transaction.value_cents)
     end
   end
 

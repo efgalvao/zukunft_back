@@ -3,9 +3,8 @@ module Users
     before_action :authenticate_user!
 
     def index
-      @transferences = Transferences::RetrieveTransference.call(current_user.id)
+      serialized_transferences = Transferences::BuildStatement.build(current_user.id)
 
-      serialized_transferences = TransferenceSerializer.new(@transferences).serializable_hash[:data]
       render json: serialized_transferences, status: :ok
     end
 
@@ -15,7 +14,7 @@ module Users
       if @transference.valid?
         serialized_transference = Users::TransferenceSerializer
                                   .new(@transference)
-                                  .serializable_hash[:data]
+                                  .serializable_hash[:data][:attributes]
         render json: serialized_transference, status: :created
       else
         render json: @transference.errors, status: :unprocessable_entity

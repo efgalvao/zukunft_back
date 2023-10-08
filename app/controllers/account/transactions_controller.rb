@@ -4,10 +4,9 @@ module Account
     before_action :set_transaction, only: %i[update]
 
     def index
-      account = Account.find_by(id: params[:account_id], user_id: current_user.id)
-      transactions = Transaction.where(account_id: account.id).order(date: :desc)
+      serialized_transactions = Transactions::BuildStatement
+                                .build(account_id: params[:account_id], user_id: current_user.id)
 
-      serialized_transactions = TransactionSerializer.new(transactions).serializable_hash[:data]
       render json: serialized_transactions, status: :ok
     end
 
