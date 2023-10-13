@@ -44,6 +44,16 @@ module Account
       render json: { 'status': ' ok' }, status: :ok
     end
 
+    def invoice_payment
+      response = ::Card::ProcessInvoicePayment.call(invoice_payment_params)
+
+      if response.valid?
+        render json: { 'status': 'ok' }, status: :created
+      else
+        render json: { 'status': 'error' }, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def set_card
@@ -52,6 +62,10 @@ module Account
 
     def card_params
       params.require(:card).permit(:name, :balance, :kind).merge(user_id: current_user.id)
+    end
+
+    def invoice_payment_params
+      params.require(:invoice_payment).permit(:card_id, :account_id, :value, :date, :description)
     end
   end
 end

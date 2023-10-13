@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
 
       resources :cards, only: %i[index create update destroy show]
+      post '/cards/invoice_payment', to: 'cards#invoice_payment'
       get '/brokers', to: 'accounts#brokers'
     end
 
