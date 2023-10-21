@@ -35,7 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_04_173112) do
     t.integer "kind", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_accounts_on_name", unique: true
+    t.index ["name", "user_id"], name: "index_accounts_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
