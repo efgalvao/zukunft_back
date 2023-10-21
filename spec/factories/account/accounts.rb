@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :account, class: Account::Account do
     name { Faker::Company.name }
     user { create(:user) }
-    balance_cents { 100 }
+    balance_cents { rand(1.0..1000.0).round(2) }
     kind { 'savings' }
 
     trait :broker do
