@@ -11,8 +11,8 @@ module Investments
                   .order(ticker: :asc)
 
         serialized_stocks = Investments::Stock::StockSerializer
-                            .new(@stocks, { include: %i[negotiations prices dividends] })
-                            .serializable_hash
+                            .new(@stocks)
+                            .serializable_hash[:data]
 
         render json: serialized_stocks, status: :ok
       end
@@ -22,7 +22,7 @@ module Investments
         if stock.valid?
           serialized_stock = Investments::Stock::StockSerializer
                              .new(stock, { include: %i[negotiations prices dividends] })
-                             .serializable_hash
+                             .serializable_hash[:data]
 
           render json: serialized_stock, status: :created
         else
@@ -33,7 +33,7 @@ module Investments
 
       def show
         serialized_stock = Investments::Stock::StockSerializer
-                           .new(@stock, { include: %i[negotiations prices dividends] })
+                           .new(@stock)
                            .serializable_hash[:data]
 
         render json: serialized_stock, status: :ok
