@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_04_173112) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_22_112603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -117,6 +117,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_04_173112) do
     t.index ["user_id"], name: "index_transferences_on_user_id"
   end
 
+  create_table "treasuries", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "invested_value_cents", default: 0, null: false
+    t.integer "current_value_cents", default: 0, null: false
+    t.boolean "released", default: false, null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_treasuries_on_account_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "username", null: false
@@ -141,4 +152,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_04_173112) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
   add_foreign_key "transferences", "users"
+  add_foreign_key "treasuries", "accounts"
 end
