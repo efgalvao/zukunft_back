@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get '/', to: 'investments#index', as: 'investments'
 
       resources :stocks, controller: 'stock/stocks', except: %i[edit new]
+      resources :treasuries, controller: 'treasury/treasuries', except: %i[edit new]
     end
 
     post 'dividends', to: 'investments/stock/dividends#create'
