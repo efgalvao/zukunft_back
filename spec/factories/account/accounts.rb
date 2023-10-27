@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :account, class: Account::Account do
-    name { Faker::Company.name }
+    name { Faker::Company.unique.name }
     user { create(:user) }
     balance_cents { rand(1.0..1000.0).round(2) }
     kind { 'savings' }
