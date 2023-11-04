@@ -8,6 +8,8 @@ module Investments
       validates :name, presence: true
       validates :name,
                 uniqueness: { scope: :account_id }
+
+      delegate :user, :name, to: :account, prefix: 'account'
     end
   end
 end

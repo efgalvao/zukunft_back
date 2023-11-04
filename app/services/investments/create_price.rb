@@ -2,7 +2,7 @@ module Investments
   class CreatePrice < ApplicationService
     def initialize(params)
       @date = params[:date]
-      @value = params[:value_cents].to_f
+      @value = params[:value].to_f
       @parent_kind = params[:parent_kind]
       @parent_id = params[:parent_id]
     end
@@ -28,12 +28,16 @@ module Investments
       if parent_kind == 'stock'
         stock.prices.create(price_params)
       else
-        []
+        treasury.prices.create(price_params)
       end
     end
 
     def stock
       @stock ||= Investments::Stock::Stock.find(parent_id)
+    end
+
+    def treasury
+      @treasury ||= Investments::Treasury::Treasury.find(parent_id)
     end
 
     def consolidate_account_report
