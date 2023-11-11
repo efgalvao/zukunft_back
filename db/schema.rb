@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_22_112603) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_11_164215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_112603) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["stock_id"], name: "index_dividends_on_stock_id"
+  end
+
+  create_table "financings", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "borrowed_value_cents", default: 0, null: false
+    t.integer "installments", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_financings_on_user_id"
   end
 
   create_table "negotiations", force: :cascade do |t|
@@ -148,6 +156,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_112603) do
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
   add_foreign_key "dividends", "stocks"
+  add_foreign_key "financings", "users"
   add_foreign_key "stocks", "accounts"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
