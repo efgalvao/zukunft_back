@@ -65,7 +65,7 @@ RSpec.describe 'Financings::Financings', type: :request do
   end
 
   describe 'GET #show' do
-    let(:financing) { create(:financing, user: user) }
+    let(:financing) { create(:financing, :with_payment, user: user) }
 
     it 'returns financing', :aggregate_failures do
       sign_in user

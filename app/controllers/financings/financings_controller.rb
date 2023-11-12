@@ -31,7 +31,9 @@ module Financings
     private
 
     def financing
-      @financing ||= Financing.find_by(id: params[:id], user_id: current_user.id)
+      @financing ||= Financing
+                     .includes(:payments)
+                     .find_by(id: params[:id], user_id: current_user.id)
     end
 
     def financing_params
