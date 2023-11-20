@@ -35,8 +35,9 @@ Rails.application.routes.draw do
     end
 
     scope module: 'financings', path: '/financings' do
-      resources :installments, only: %i[create]
-      resources :financings, only: %i[index create show delete]
+      resources :financings, only: %i[index create show delete] do
+        resources :installments, only: %i[index create]
+      end
     end
     post 'dividends', to: 'investments/stock/dividends#create'
     post 'prices', to: 'investments/prices#create'

@@ -7,7 +7,7 @@ module Financings
       @financings = Financings::Financing.where(user_id: current_user.id).all
 
       serialized_financings = FinancingSerializer.new(@financings).serializable_hash[:data]
-      # render json: serialized_financings.map { |financing| financing[:attributes] }
+
       render json: serialized_financings, status: :ok
     end
 
@@ -37,7 +37,6 @@ module Financings
 
     def financing
       @financing ||= Financing
-                     .includes(:payments)
                      .find_by(id: params[:id], user_id: current_user.id)
     end
 

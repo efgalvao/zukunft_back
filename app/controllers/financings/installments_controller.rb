@@ -2,6 +2,16 @@ module Financings
   class InstallmentsController < ApplicationController
     before_action :authenticate_user!
 
+    def index
+      installments = Financings::Financing
+                     .includes(:payments)
+                     .find_by(id: params[:financing_id], user_id: current_user.id).payments
+
+      serialied_installments = Financings::InstallmentListSerializer.new(installments).serializable_hash[:data]
+
+      render json: serialied_installments, status: :ok
+    end
+
     def create
       @installment = Financings::CreateInstallment.call(installment_params)
 

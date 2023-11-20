@@ -10,7 +10,7 @@ RSpec.describe 'Financings::Installments', type: :request do
     context 'with valid attributes' do
       it 'create payment', :aggregate_failures do
         sign_in user
-        post '/api/v1/financings/installments', params: { installment: {
+        post "/api/v1/financings/financings/#{financing.id}/installments", params: { installment: {
           financing_id: financing.id,
           ordinary: payment_attributes[:ordinary],
           parcel: payment_attributes[:parcel],
@@ -32,7 +32,7 @@ RSpec.describe 'Financings::Installments', type: :request do
     context 'with invalid attributes' do
       it 'does not create stock', :aggregate_failures do
         sign_in user
-        post '/api/v1/financings/installments', params: { installment: {
+        post "/api/v1/financings/financings/#{financing.id}/installments", params: { installment: {
           ordinary: payment_attributes[:ordinary],
           parcel: payment_attributes[:parcel],
           paid_parcels: payment_attributes[:paid_parcels],
