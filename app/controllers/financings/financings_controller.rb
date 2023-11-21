@@ -1,7 +1,7 @@
 module Financings
   class FinancingsController < ApplicationController
     before_action :authenticate_user!
-    before_action :financing, only: %i[show delete]
+    before_action :financing, only: %i[show destroy]
 
     def index
       @financings = Financings::Financing.where(user_id: current_user.id).all
@@ -28,7 +28,7 @@ module Financings
       render json: serialized_financing, status: :ok
     end
 
-    def delete
+    def destroy
       @financing.destroy
       render json: { 'status': ' ok' }, status: :ok
     end
