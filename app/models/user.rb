@@ -7,4 +7,5 @@ class User < ApplicationRecord
   has_many :accounts, class_name: 'Account::Account', dependent: :destroy
   has_many :transferences, class_name: 'Transference', dependent: :destroy
   has_many :categories, class_name: 'Category', dependent: :destroy
+  has_many :financings, class_name: 'Financings::Financing', dependent: :destroy
 end
