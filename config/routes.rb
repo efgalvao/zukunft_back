@@ -34,6 +34,11 @@ Rails.application.routes.draw do
       resources :treasuries, controller: 'treasury/treasuries', except: %i[edit new]
     end
 
+    scope module: 'financings', path: '/financings' do
+      resources :financings, only: %i[index create show destroy] do
+        resources :installments, only: %i[index create]
+      end
+    end
     post 'dividends', to: 'investments/stock/dividends#create'
     post 'prices', to: 'investments/prices#create'
     post 'negotiations', to: 'investments/negotiations#create'
