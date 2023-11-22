@@ -12,4 +12,8 @@ FactoryBot.define do
     monetary_correction_cents { SecureRandom.random_number(1_000..100_000_000) }
     adjustment_cents { SecureRandom.random_number(1_000..100_000_000) }
   end
+
+  trait :non_ordinary do
+    ordinary { false }
+  end
 end
