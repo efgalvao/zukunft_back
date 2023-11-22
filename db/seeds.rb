@@ -12,7 +12,7 @@ require 'factory_bot'
 
 # Create some users using the FactoryBot factories
 user1 = FactoryBot.create(:user, name: 'John Doe', email: 'john@example.com', password: 'password')
-user2 = FactoryBot.create(:user, name: 'Jane Smith', email: 'user2@test.com', password: '123456')
+user2 = FactoryBot.create(:user, name: 'Jane Smith', email: 'user@example.com', password: '123456')
 
 # Create accounts using the FactoryBot factories
 FactoryBot.create(:account, name: 'Bank', kind: 'savings', user: user1)
@@ -116,4 +116,21 @@ FactoryBot.create(:price, priceable_type: treasury2.class, priceable_id: treasur
 
   FactoryBot.create(:transaction, account: account3, date: Time.zone.today - (i + 1).months)
   FactoryBot.create(:transaction, account: account3, date: Time.zone.today + (i + 1).months)
+end
+
+# Create financings for every user
+financing1 = FactoryBot.create(:financing, user: user1)
+financing2 = FactoryBot.create(:financing, user: user2)
+
+# Create 5 ordinary payments for every financing
+5.times do |i|
+  FactoryBot.create(:payment, financing: financing1, payment_date: Time.zone.today - (i + 1).months)
+
+  FactoryBot.create(:payment, financing: financing2, payment_date: Time.zone.today + (i + 1).months)
+end
+
+  # Create 5 non-ordinary payments for each financing
+5.times do |i|
+  FactoryBot.create(:payment, :non_ordinary, financing: financing1, payment_date: Time.zone.today - (i + 1).months)
+  FactoryBot.create(:payment, :non_ordinary, financing: financing2, payment_date: Time.zone.today - (i + 1).months)
 end
