@@ -19,5 +19,11 @@ module Account
     def current_report
       reports.find_by(date: Date.current.beginning_of_month..Date.current.end_of_month)
     end
+
+    def total_balance_cents
+      treasuries.where(released: false).order(name: :asc).sum(&:current_value_cents) +
+        stocks.sum(&:current_total_value_cents) +
+        balance_cents
+    end
   end
 end

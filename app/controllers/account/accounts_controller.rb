@@ -11,7 +11,12 @@ module Account
     end
 
     def show
-      serialized_account = AccountSerializer.new(@account).serializable_hash[:data]
+      serialized_account = if @account.kind == 'savings'
+                             AccountSerializer.new(@account).serializable_hash[:data]
+                           else
+                             BrokerAccountSerializer.new(@account).serializable_hash[:data]
+                           end
+
       render json: serialized_account, status: :ok
     end
 
