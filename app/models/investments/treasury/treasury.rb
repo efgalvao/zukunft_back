@@ -10,6 +10,8 @@ module Investments
                 uniqueness: { scope: :account_id }
 
       delegate :user, :name, to: :account, prefix: 'account'
+
+      scope :not_released, -> { where(released: false) }
     end
   end
 end

@@ -73,9 +73,8 @@ module AccountReport
     end
 
     def total_balance
-      # TODO
-      # account.treasuries.where(released_at: nil).order(name: :asc).sum(&:current_value_cents) +
-      account.stocks.sum(&:current_total_value_cents) +
+      account.treasuries.not_released.sum(&:current_value_cents) +
+        account.stocks.sum(&:current_total_value_cents) +
         account.balance_cents
     end
   end
