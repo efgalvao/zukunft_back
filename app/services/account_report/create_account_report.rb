@@ -33,7 +33,7 @@ module AccountReport
         incomes_cents: incomes,
         expenses_cents: expenses,
         invested_cents: invested,
-        final_balance_cents: total_balance
+        final_balance_cents: final_balance
       }
     end
 
@@ -52,7 +52,7 @@ module AccountReport
                          kind: 'investment').sum(:value_cents)
     end
 
-    def total_balance
+    def final_balance
       incomes(date) - expenses(date) - invested(date)
     end
 
